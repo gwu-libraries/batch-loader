@@ -22,7 +22,7 @@ Requires Python >= 3.5
 ## Running
 To run batch-loader:
 
-    python etd_loader.py <path to csv>
+    python batch_loader.py <path to csv>
 
 
 ## Specification of CSV
