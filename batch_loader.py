@@ -106,12 +106,13 @@ def find_files(row_filepath, row_first_filepath, base_filepath):
 
 
 def repo_import(repo_metadata_filepath, title, first_file, other_files, repository_id, ingest_command,
-                ingest_path):
+                ingest_path, ingest_depositor):
     log.info('Importing %s.', title)
     # rake gwss:ingest_etd -- --manifest='path-to-manifest-json-file' --primaryfile='path-to-primary-attachment-file/myfile.pdf' --otherfiles='path-to-all-other-attachments-folder'
     command = ingest_command.split(' ') + ['--',
                                            '--manifest=%s' % repo_metadata_filepath,
-                                           '--primaryfile=%s' % first_file]
+                                           '--primaryfile=%s' % first_file,
+                                           '--depositor=%s' % ingest_depositor]
     if other_files:
         command.extend(['--otherfiles=%s' % ','.join(other_files)])
     if repository_id:
@@ -158,7 +159,8 @@ if __name__ == '__main__':
                 # TODO: Handle passing existing repo id
                 repo_id = repo_import(metadata_filepath, metadata['title'], first_file, other_files, None,
                                       config.ingest_command,
-                                      config.ingest_path)
+                                      config.ingest_path,
+                                      config.ingest_depositor)
                 # TODO: Write repo id to output CSV
             except Exception as e:
                 # TODO: Record exception to output CSV
