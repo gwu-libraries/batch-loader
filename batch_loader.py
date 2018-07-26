@@ -12,11 +12,10 @@ log = logging.getLogger(__name__)
 
 required_field_names = (
     'files',
-    'object_type',
-    'title',
-    'author1',
-    'type_of_work1',
-    'rights'
+    'resource_type1',
+    'title1',
+    'creator1',
+    'license1'
 )
 
 
@@ -166,5 +165,5 @@ if __name__ == '__main__':
                 # TODO: Record exception to output CSV
                 raise e
         finally:
-            if os.path.exists(metadata_filepath):
+            if (not config.debug_mode) and os.path.exists(metadata_filepath):
                 shutil.rmtree(metadata_temp_path, ignore_errors=True)
