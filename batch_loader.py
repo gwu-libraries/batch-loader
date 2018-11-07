@@ -16,11 +16,10 @@ required_field_names = (
     'resource_type1',
     'title1',
     'creator1',
-    'license1',
-    'worktype'
+    'license1'
 )
 
-def run_ingest_process(csv_path,ingest_command,ingest_path,ingest_depositor,url = None,debug = None ):
+def run_ingest_process(csv_path,ingest_command,ingest_path,ingest_depositor,worktype, url = None,debug = None):
     logging.basicConfig(
         level=logging.DEBUG if debug else logging.INFO
     )
@@ -52,7 +51,7 @@ def run_ingest_process(csv_path,ingest_command,ingest_path,ingest_depositor,url 
                                       ingest_command,
                                       ingest_path,
                                       ingest_depositor,
-                                      row['worktype'])
+                                      worktype)
                 # TODO: Write repo id to output CSV
             except Exception as e:
                 # TODO: Record exception to output CSV
@@ -120,8 +119,6 @@ def analyze_field_names(field_names):
         singular_field_names.remove('fulltext_url')
     if 'first_file' in singular_field_names:
         singular_field_names.remove('first_file')
-    if 'worktype' in singular_field_names:
-        singular_field_names.remove('worktype')
     log.debug('Singular field names: {}'.format(singular_field_names))
     log.debug('Repeating field names: {}'.format(repeating_field_names))
     return singular_field_names, repeating_field_names
@@ -240,5 +237,6 @@ if __name__ == '__main__':
     parser.add_argument('--debug', action='store_true')
     parser.add_argument('csv', help='filepath of CSV file')
     parser.add_argument('--url', action='store_true')
+    parser.add_argument('--worktype',type=str,help='The Hyrax work type of the works [default: Etd]',default="Etd")
     args = parser.parse_args()
-    run_ingest_process(args.csv,config.ingest_command, config.ingest_path, config.ingest_depositor,url = args.url,debug = args.debug)
+    run_ingest_process(args.csv,config.ingest_command, config.ingest_path, config.ingest_depositor,args.worktype,url = args.url,debug = args.debug)
