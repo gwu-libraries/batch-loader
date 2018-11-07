@@ -60,11 +60,13 @@ def download_file(url,dwnld_dir = None):
 
 	if 200 <= r.status_code <= 299:
 		try:
+			print('downloading file from {}'.format(url))
 			with open(local_filename, 'wb') as f:
 				for chunk in r.iter_content(chunk_size=1024):
 					if chunk: # filter out keep-alive new chunks
 						f.write(chunk)
 						#f.flush() commented by recommendation from J.F.Sebastian
+			print('done downloading %s' % (local_filename))
 			return os.path.abspath(local_filename)
 		except PermissionError as e:
 			if dwnld_dir:

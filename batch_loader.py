@@ -16,7 +16,8 @@ required_field_names = (
     'resource_type1',
     'title1',
     'creator1',
-    'license1'
+    'license1',
+    'worktype'
 )
 
 def run_ingest_process(csv_path,ingest_command,ingest_path,ingest_depositor,url = None,debug = None ):
@@ -50,13 +51,14 @@ def run_ingest_process(csv_path,ingest_command,ingest_path,ingest_depositor,url 
                 repo_id = repo_import(metadata_filepath, metadata['title'], first_file, other_files, None,
                                       ingest_command,
                                       ingest_path,
-                                      ingest_depositor)
+                                      ingest_depositor,
+                                      row['worktype'])
                 # TODO: Write repo id to output CSV
             except Exception as e:
                 # TODO: Record exception to output CSV
                 raise e
         finally:
-            if (not config.debug_mode) and os.path.exists(metadata_filepath):
+            if (not debug) and os.path.exists(metadata_filepath):
                 shutil.rmtree(metadata_temp_path, ignore_errors=True)
                 if os.path.exists(raw_download_dir):
                     shutil.rmtree(raw_download_dir, ignore_errors=True)
@@ -118,6 +120,8 @@ def analyze_field_names(field_names):
         singular_field_names.remove('fulltext_url')
     if 'first_file' in singular_field_names:
         singular_field_names.remove('first_file')
+    if 'worktype' in singular_field_names:
+        singular_field_names.remove('worktype')
     log.debug('Singular field names: {}'.format(singular_field_names))
     log.debug('Repeating field names: {}'.format(repeating_field_names))
     return singular_field_names, repeating_field_names
@@ -191,7 +195,7 @@ def find_files(row_filepath, row_first_filepath, base_filepath):
 
 
 def repo_import(repo_metadata_filepath, title, first_file, other_files, repository_id, ingest_command,
-                ingest_path, ingest_depositor):
+                ingest_path, ingest_depositor,worktype):
     """
     Desc: this function takes in relevant information and paths and calls the rake
         task to ingest the work into Hyrax
@@ -215,7 +219,8 @@ def repo_import(repo_metadata_filepath, title, first_file, other_files, reposito
     command = ingest_command.split(' ') + ['--',
                                            '--manifest=%s' % repo_metadata_filepath,
                                            '--primaryfile=%s' % first_file,
-                                           '--depositor=%s' % ingest_depositor]
+                                           '--depositor=%s' % ingest_depositor,
+                                           '--worktype=%s' % worktype]
     if other_files:
         command.extend(['--otherfiles=%s' % ','.join(other_files)])
     if repository_id:
