@@ -60,7 +60,9 @@ def run_ingest_process(csv_path,ingest_command,ingest_path,ingest_depositor,work
             if (not debug) and os.path.exists(metadata_filepath):
                 shutil.rmtree(metadata_temp_path, ignore_errors=True)
                 if os.path.exists(raw_download_dir):
-                    shutil.rmtree(raw_download_dir, ignore_errors=True)
+                    print("ensure to remove {}\nit contians all downloaded files".format(raw_download_dir))
+                    print("however until sidekiq is done they should persist")
+                    #shutil.rmtree(raw_download_dir, ignore_errors=True)
 
 def load_csv(filepath):
     """
@@ -84,6 +86,7 @@ def validate_field_names(field_names,use_url):
         if field_name == 'fulltext_url':
             if not use_url:
                 continue #we dont need this if we have paths instead of urls
+        print(field_name)
         assert field_name in field_names
 
 
@@ -209,6 +212,7 @@ def repo_import(repo_metadata_filepath, title, first_file, other_files, reposito
         ingest_path (str): the directory of our rails project - set in config.py
         ingest_depositor (str): the username of the person depositing the
             information - set in the config.py file
+        worktype: the work type in hyrax ie Etd
     Returns: the id of the work in hyrax
     """
     log.info('Importing %s.', title)

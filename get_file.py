@@ -12,7 +12,6 @@ from urllib.parse import unquote
 class UrlException(ValueError):
 	pass
 def get_file_name_from_url(url):
-	print(url)
 	match = re.search("[/][^/]+[/]$",url)
 	if match:#Directory with / at the end
 		start = match.start() +1
@@ -44,6 +43,8 @@ def download_file(url,dwnld_dir = None):
 			local_filename = dwnld_dir+local_filename
 		else:
 			local_filename = dwnld_dir+'/'+local_filename
+	else:# dwnld_dir is None
+		dwnld_dir = '.'
 	if not os.path.exists(dwnld_dir):
 		mkdir(dwnld_dir,['-p'])#make directory and make all directories that dont exist on the way
 	# NOTE the stream=True parameter
@@ -66,7 +67,10 @@ def download_file(url,dwnld_dir = None):
 					if chunk: # filter out keep-alive new chunks
 						f.write(chunk)
 						#f.flush() commented by recommendation from J.F.Sebastian
-			print('done downloading %s' % (local_filename))
+			print('done downloading %s' % (local_filename),"file size:",file_size)
+			file_size = os.path.getsize(local_filename)
+			if file_size == 0:
+				raise
 			return os.path.abspath(local_filename)
 		except PermissionError as e:
 			if dwnld_dir:
