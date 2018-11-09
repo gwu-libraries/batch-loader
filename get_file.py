@@ -67,8 +67,9 @@ def download_file(url,dwnld_dir = None):
 					if chunk: # filter out keep-alive new chunks
 						f.write(chunk)
 						#f.flush() commented by recommendation from J.F.Sebastian
-			print('done downloading %s' % (local_filename),"file size:",file_size)
 			file_size = os.path.getsize(local_filename)
+			print('done downloading %s' % (local_filename),"file size:",file_size)
+
 			if file_size == 0:
 				raise
 			return os.path.abspath(local_filename)

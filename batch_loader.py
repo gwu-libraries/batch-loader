@@ -19,7 +19,7 @@ required_field_names = (
     'license1'
 )
 
-def run_ingest_process(csv_path,ingest_command,ingest_path,ingest_depositor,worktype, url = None,debug = None):
+def run_ingest_process_csv(csv_path,ingest_command,ingest_path,ingest_depositor,worktype, url = None,debug = None,collection = None):
     logging.basicConfig(
         level=logging.DEBUG if debug else logging.INFO
     )
@@ -38,8 +38,14 @@ def run_ingest_process(csv_path,ingest_command,ingest_path,ingest_depositor,work
             row['files'] = file_full_path
             row['first_file'] = file_full_path
         metadata = create_repository_metadata(row, singular_field_names, repeating_field_names)
+        # at this point that metadata is a dictionary
+        # of all the metadata where reapeating values are key : [value,value]
+        # and scalars are key : value
+        # the keys are exactly as they will be mapped in hyrax ie "creator" : ["Yoshikami, Katie-Lynn"]
+        # instead of "creator1" or any numbered item.
         metadata_temp_path = tempfile.mkdtemp()
         metadata_filepath = os.path.join(metadata_temp_path, 'metadata.json')
+
         try:
             with open(metadata_filepath, 'w') as repo_metadata_file:
                 json.dump(metadata, repo_metadata_file, indent=4)
@@ -51,7 +57,8 @@ def run_ingest_process(csv_path,ingest_command,ingest_path,ingest_depositor,work
                                       ingest_command,
                                       ingest_path,
                                       ingest_depositor,
-                                      worktype)
+                                      worktype,
+                                      collection)
                 # TODO: Write repo id to output CSV
             except Exception as e:
                 # TODO: Record exception to output CSV
@@ -195,7 +202,7 @@ def find_files(row_filepath, row_first_filepath, base_filepath):
 
 
 def repo_import(repo_metadata_filepath, title, first_file, other_files, repository_id, ingest_command,
-                ingest_path, ingest_depositor,worktype):
+                ingest_path, ingest_depositor,worktype,collection = None):
     """
     Desc: this function takes in relevant information and paths and calls the rake
         task to ingest the work into Hyrax
@@ -212,7 +219,8 @@ def repo_import(repo_metadata_filepath, title, first_file, other_files, reposito
         ingest_path (str): the directory of our rails project - set in config.py
         ingest_depositor (str): the username of the person depositing the
             information - set in the config.py file
-        worktype: the work type in hyrax ie Etd
+        worktype(str): the work type in hyrax ie Etd
+        collectoin (str): the id of the collection in hyrax to add this work to 
     Returns: the id of the work in hyrax
     """
     log.info('Importing %s.', title)
@@ -222,6 +230,8 @@ def repo_import(repo_metadata_filepath, title, first_file, other_files, reposito
                                            '--primaryfile=%s' % first_file,
                                            '--depositor=%s' % ingest_depositor,
                                            '--worktype=%s' % worktype]
+    if collection:
+        command += ['--collection=%s' % collection]
     if other_files:
         command.extend(['--otherfiles=%s' % ','.join(other_files)])
     if repository_id:
@@ -242,5 +252,7 @@ if __name__ == '__main__':
     parser.add_argument('csv', help='filepath of CSV file')
     parser.add_argument('--url', action='store_true')
     parser.add_argument('--worktype',type=str,help='The Hyrax work type of the works [default: Etd]',default="Etd")
+    parser.add_argument('--collection',type=str,help='the id of the collection to add this work to in hyrax',default=None)
     args = parser.parse_args()
-    run_ingest_process(args.csv,config.ingest_command, config.ingest_path, config.ingest_depositor,args.worktype,url = args.url,debug = args.debug)
+    run_ingest_process_csv(args.csv,config.ingest_command, config.ingest_path,
+     config.ingest_depositor,args.worktype,url = args.url,debug = args.debug,collection = args.collection)
