@@ -19,7 +19,7 @@ required_field_names = (
     'license1'
 )
 
-def run_ingest_process_csv(csv_path,ingest_command,ingest_path,ingest_depositor,worktype, url = None,debug = None,collection = None):
+def run_ingest_process_csv(csv_path,ingest_command,ingest_path,ingest_depositor,worktype, url = None,debug = None,collection = None, tiff = None):
     logging.basicConfig(
         level=logging.DEBUG if debug else logging.INFO
     )
@@ -36,6 +36,14 @@ def run_ingest_process_csv(csv_path,ingest_command,ingest_path,ingest_depositor,
             print(row['fulltext_url'])
             file_full_path  = get_file.download_file(row['fulltext_url'],dwnld_dir = raw_download_dir)
             row['files'] = file_full_path
+            row['first_file'] = file_full_path
+        if tiff: # if we want to generate a tiff, and have it be the primary file
+            OGFN = os.path.basename(file_full_path)# OGFN => OriGinal File Name
+            generated_tiff = get_file.create_tiff_imagemagick(file_full_path)
+            tiff_FN = os.path.basename(generated_tiff)
+            files_dir = get_file.create_dir_for([file_full_path,generated_tiff])
+            file_full_path = os.path.join(files_dir,tiff_FN)
+            row['files'] = files_dir
             row['first_file'] = file_full_path
         metadata = create_repository_metadata(row, singular_field_names, repeating_field_names)
         # at this point that metadata is a dictionary
@@ -220,7 +228,7 @@ def repo_import(repo_metadata_filepath, title, first_file, other_files, reposito
         ingest_depositor (str): the username of the person depositing the
             information - set in the config.py file
         worktype(str): the work type in hyrax ie Etd
-        collectoin (str): the id of the collection in hyrax to add this work to 
+        collectoin (str): the id of the collection in hyrax to add this work to
     Returns: the id of the work in hyrax
     """
     log.info('Importing %s.', title)
@@ -253,6 +261,7 @@ if __name__ == '__main__':
     parser.add_argument('--url', action='store_true')
     parser.add_argument('--worktype',type=str,help='The Hyrax work type of the works [default: Etd]',default="Etd")
     parser.add_argument('--collection',type=str,help='the id of the collection to add this work to in hyrax',default=None)
+    parser.add_argument('--tiff',action='store_true')
     args = parser.parse_args()
     run_ingest_process_csv(args.csv,config.ingest_command, config.ingest_path,
-     config.ingest_depositor,args.worktype,url = args.url,debug = args.debug,collection = args.collection)
+     config.ingest_depositor,args.worktype,url = args.url,debug = args.debug,collection = args.collection,tiff = args.tiff)
