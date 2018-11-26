@@ -27,21 +27,16 @@ To run batch-loader:
 
 ## Specification of CSV
 1. The first row must contain the field names.
-2. Fields that take multiple values should be placed in multiple columns.
-   Each field name should be appended with an incrementing integer. For
-   example, "author1", "author2", "author3". Even if there is only a
-   single entry, but the field is repeating, the field name should end with "1".
-   ()Fields with multiple values will be passed as lists to GWSS.)
-3. The following fields are required: files, object_type, title, author1, 
-   type_of_work1, rights.
-4. The following fields are optional, but if provided must use these field names:
-   first_file, gwss_id.
+2. The following columns are required:
+   - title1
+   - creator1
+   - resource_type1
+   - license1
+   - files - path to the attachment file, or in the case of multiple attachments, to the folder containing the attachment files
+   - first_file - (Optional) Path to the file which should be positioned as the first attachment (used for the thumbnail, etc.)
+   - object_id - (Optional) If specified, the GW ScholarSpace ID of the existing object to be updated
+3. Multiple numbered columns can be used to represent multiple-valued fields.  For example, if there are multiple authors, then add columns called `creator2`, `creator3`, etc.
 5. Additional fields included in the CSV will be passed to GWSS using the provided 
    field names. For example, a "subtitle" field included in the CSV will be
    passed as "subtitle" to GWSS.
-6. The ordering of fields is not significant.
-
-## TODO:
-1. Support updating when already has a repo id.
-2. Write output CSV containing repo id.
-3. Error handling when import fails.
+6. The ordering of columns does not matter.
