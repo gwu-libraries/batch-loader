@@ -49,6 +49,7 @@ def analyze_field_names(field_names):
             elif name_part not in repeating_field_names:
                 singular_field_names.add(field_name)
     singular_field_names.remove('files')
+    singular_field_names.remove('object_id')
     if 'first_file' in singular_field_names:
         singular_field_names.remove('first_file')
     log.debug('Singular field names: {}'.format(singular_field_names))
