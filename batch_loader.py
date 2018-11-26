@@ -155,8 +155,9 @@ if __name__ == '__main__':
                 log.debug('Writing to {}: {}'.format(metadata_filepath, json.dumps(metadata)))
             try:
                 first_file, other_files = find_files(row['files'], row.get('first_file'), base_filepath)
-                # TODO: Handle passing existing repo id
-                repo_id = repo_import(metadata_filepath, metadata['title'], first_file, other_files, None,
+                update_object_id = row['object_id']
+                repo_id = repo_import(metadata_filepath, metadata['title'], first_file, other_files,
+                                      update_object_id,
                                       config.ingest_command,
                                       config.ingest_path,
                                       config.ingest_depositor)
