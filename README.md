@@ -22,6 +22,7 @@ Requires Python >= 3.5
 ## Running
 To run batch-loader:
 
+    source ENV/bin/activate
     python batch_loader.py <path to csv>
 
 
