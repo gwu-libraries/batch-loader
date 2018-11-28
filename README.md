@@ -35,13 +35,20 @@ To run batch-loader:
 |----------|---------|-------------------------------|-----|
 |title1|Y|||
 |creator1|Y|Author||
-|resource_type1|Y|Type of Work||
-|license1|Y|||
-|gw_affiliation1|N|GW Unit||
+|resource_type1|Y|Type of Work|For values, see https://github.com/gwu-libraries/scholarspace-hyrax/blob/master/config/authorities/resource_types.yml|
+|license1|Y||For values, see https://github.com/gwu-libraries/scholarspace-hyrax/blob/master/config/authorities/licenses.yml - NOTE: use the `id` values|
+|gw_affiliation1|N|GW Unit|For values, see https://github.com/gwu-libraries/scholarspace-hyrax/blob/master/config/authorities/gw_affiliations.yml|
 |location1|N|||
+|rights_statement|N||For values, see https://github.com/gwu-libraries/scholarspace-hyrax/blob/master/config/authorities/rights_statements.yml - NOTE: use the `id` values.  Also note that this is a single-valued field.|
 |date_created1|N||Should be YYYY format|
 |description1|N|Abstract||
-|keyword1|N||
+|keyword1|N|||
+|identifier1|N|||
+|contributor1|N|||
+|publisher1|N|||
+|language1|N|||
+|related_url1|N|||
+|bibliographic_citation1|N|Previous Publication Information||
 |depositor|Y||Email address for the depositor/owner in GWSS|
 |files|Y||Path to the attachment file, or in the case of multiple attachments, to the folder containing the attachment files|
 |first_file|N||Path to the file which should be positioned as the first attachment (used for the thumbnail, etc.|
