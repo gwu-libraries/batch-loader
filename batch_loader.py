@@ -49,6 +49,7 @@ def analyze_field_names(field_names):
             elif name_part not in repeating_field_names:
                 singular_field_names.add(field_name)
     singular_field_names.remove('files')
+    singular_field_names.remove('object_id')
     if 'first_file' in singular_field_names:
         singular_field_names.remove('first_file')
     log.debug('Singular field names: {}'.format(singular_field_names))
@@ -76,6 +77,11 @@ def create_repository_metadata(row, singular_field_names, repeating_field_names)
 
 
 def find_files(row_filepath, row_first_filepath, base_filepath):
+    if row_filepath is '':
+        # We will interpret this as "No files to load or update"
+        print("row_filepath is None")
+        return None, None
+
     filepath = os.path.join(base_filepath, row_filepath)
     if not os.path.exists(filepath):
         raise FileNotFoundError(filepath)
@@ -110,13 +116,16 @@ def repo_import(repo_metadata_filepath, title, first_file, other_files, reposito
     # rake gwss:ingest_etd -- --manifest='path-to-manifest-json-file' --primaryfile='path-to-primary-attachment-file/myfile.pdf' --otherfiles='path-to-all-other-attachments-folder'
     command = ingest_command.split(' ') + ['--',
                                            '--manifest=%s' % repo_metadata_filepath,
-                                           '--primaryfile=%s' % first_file,
                                            '--depositor=%s' % ingest_depositor]
+    if first_file:
+        command.extend(['--primaryfile=%s' % first_file])
     if other_files:
         command.extend(['--otherfiles=%s' % ','.join(other_files)])
     if repository_id:
         log.info('%s is an update.', title)
         command.extend(['--update-item-id=%s' % repository_id])
+        if first_file is None:
+            command.extend(['--skip-file-updates'])
     log.info("Command is: %s" % ' '.join(command))
     output = subprocess.check_output(command, cwd=ingest_path)
     repository_id = output.decode('utf-8').rstrip('\n')
@@ -155,8 +164,9 @@ if __name__ == '__main__':
                 log.debug('Writing to {}: {}'.format(metadata_filepath, json.dumps(metadata)))
             try:
                 first_file, other_files = find_files(row['files'], row.get('first_file'), base_filepath)
-                # TODO: Handle passing existing repo id
-                repo_id = repo_import(metadata_filepath, metadata['title'], first_file, other_files, None,
+                update_object_id = row['object_id']
+                repo_id = repo_import(metadata_filepath, metadata['title'], first_file, other_files,
+                                      update_object_id,
                                       config.ingest_command,
                                       config.ingest_path,
                                       config.ingest_depositor)

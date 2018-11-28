@@ -22,26 +22,35 @@ Requires Python >= 3.5
 ## Running
 To run batch-loader:
 
+    source ENV/bin/activate
     python batch_loader.py <path to csv>
 
 
 ## Specification of CSV
-1. The first row must contain the field names.
-2. Fields that take multiple values should be placed in multiple columns.
-   Each field name should be appended with an incrementing integer. For
-   example, "author1", "author2", "author3". Even if there is only a
-   single entry, but the field is repeating, the field name should end with "1".
-   ()Fields with multiple values will be passed as lists to GWSS.)
-3. The following fields are required: files, object_type, title, author1, 
-   type_of_work1, rights.
-4. The following fields are optional, but if provided must use these field names:
-   first_file, gwss_id.
-5. Additional fields included in the CSV will be passed to GWSS using the provided 
-   field names. For example, a "subtitle" field included in the CSV will be
-   passed as "subtitle" to GWSS.
-6. The ordering of fields is not significant.
+- The first row must contain the field names.  The ordering of the columns does not matter.
+- Multiple numbered columns can be used to represent multiple-valued fields.  For example, if there are multiple authors, then add columns called `creator2`, `creator3`, etc.
+- Field values are as per the table below:  (Note: more to be added soon)
 
-## TODO:
-1. Support updating when already has a repo id.
-2. Write output CSV containing repo id.
-3. Error handling when import fails.
+|Field Name|Required?|Label in GWSS UI (if different)|Notes|
+|----------|---------|-------------------------------|-----|
+|title1|Y|||
+|creator1|Y|Author||
+|resource_type1|Y|Type of Work||
+|license1|Y|||
+|gw_affiliation1|N|GW Unit||
+|location1|N|||
+|date_created1|N||Should be YYYY format|
+|description1|N|Abstract||
+|keyword1|N||
+|files|Y||Path to the attachment file, or in the case of multiple attachments, to the folder containing the attachment files|
+|first_file|N||Path to the file which should be positioned as the first attachment (used for the thumbnail, etc.|
+|object_id|N||If specified, the GW ScholarSpace ID of the existing object to be updated|
+
+
+## Updating existing items
+
+To update items already in GW ScholarSpace, populate the `object_id` column with the GWSS ID of the item.
+
+When updating:
+
+- If a column is left blank, batch loading will _*delete*_ the metadata for that field on the existing item in GWSS.  For instance, if the item in GWSS currently has a "GW Unit" value, then updating it via the batch loader and leaving the `gw_affiliation1` column blank wil _*remove*_ the GW Unit value in GWSS.  If there is no `gw_affiliation1` column in the CSV, then the GW Unit metadata in GWSS will not be modified, if present. 
