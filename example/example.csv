@@ -1,3 +1,3 @@
-files,resource_type1,title1,creator1,creator2,resource_type2,license1,first_file,object_id,depositor
-,treatise,Our Treatise,"Littman, Justin","Trent, Rachel",journal,http://creativecommons.org/licenses/by/3.0/us/,,1a2v3c,kerchner@gwu.edu
-my_book,book,My Book,"Littman, Justin",,journal,http://creativecommons.org/licenses/by/3.0/us/,my_book/intro.txt,,openaccess@gwu.edu
+files,resource_type1,title1,creator1,creator2,resource_type2,license1,first_file,object_id,depositor,rights_statement
+,Treatise,Our Treatise,"Littman, Justin","Trent, Rachel",Journal,http://creativecommons.org/licenses/by/3.0/us/,,d504rk891,kerchner@gwu.edu,http://rightsstatements.org/vocab/InC/1.0/
+my_book,book,My Book,"Littman, Justin",,Journal,http://creativecommons.org/licenses/by/3.0/us/,my_book/intro.txt,,openaccess@gwu.edu,http://rightsstatements.org/vocab/InC/1.0/
