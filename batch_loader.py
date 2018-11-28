@@ -50,6 +50,7 @@ def analyze_field_names(field_names):
                 singular_field_names.add(field_name)
     singular_field_names.remove('files')
     singular_field_names.remove('object_id')
+    singular_field_names.remove('depositor')
     if 'first_file' in singular_field_names:
         singular_field_names.remove('first_file')
     log.debug('Singular field names: {}'.format(singular_field_names))
@@ -164,12 +165,13 @@ if __name__ == '__main__':
                 log.debug('Writing to {}: {}'.format(metadata_filepath, json.dumps(metadata)))
             try:
                 first_file, other_files = find_files(row['files'], row.get('first_file'), base_filepath)
+                depositor = row['depositor']
                 update_object_id = row['object_id']
                 repo_id = repo_import(metadata_filepath, metadata['title'], first_file, other_files,
                                       update_object_id,
                                       config.ingest_command,
                                       config.ingest_path,
-                                      config.ingest_depositor)
+                                      depositor)
                 # TODO: Write repo id to output CSV
             except Exception as e:
                 # TODO: Record exception to output CSV
