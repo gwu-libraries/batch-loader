@@ -41,7 +41,7 @@ To run batch-loader:
 |location1|N|||
 |date_created1|N||Should be YYYY format|
 |description1|N|Abstract||
-|keyword|N||
+|keyword1|N||
 |files|Y||Path to the attachment file, or in the case of multiple attachments, to the folder containing the attachment files|
 |first_file|N||Path to the file which should be positioned as the first attachment (used for the thumbnail, etc.|
 |object_id|N||If specified, the GW ScholarSpace ID of the existing object to be updated|
