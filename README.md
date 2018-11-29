@@ -37,9 +37,9 @@ To run batch-loader:
 |creator1|Y|Author||
 |resource_type1|Y|Type of Work|For values, see https://github.com/gwu-libraries/scholarspace-hyrax/blob/master/config/authorities/resource_types.yml|
 |license1|Y||For values, see https://github.com/gwu-libraries/scholarspace-hyrax/blob/master/config/authorities/licenses.yml - NOTE: use the `id` values|
+|rights_statement|Y||For values, see https://github.com/gwu-libraries/scholarspace-hyrax/blob/master/config/authorities/rights_statements.yml - NOTE: use the `id` values.  Also note that this is a single-valued field.|
 |gw_affiliation1|N|GW Unit|For values, see https://github.com/gwu-libraries/scholarspace-hyrax/blob/master/config/authorities/gw_affiliations.yml|
 |location1|N|||
-|rights_statement|N||For values, see https://github.com/gwu-libraries/scholarspace-hyrax/blob/master/config/authorities/rights_statements.yml - NOTE: use the `id` values.  Also note that this is a single-valued field.|
 |date_created1|N||Should be YYYY format|
 |description1|N|Abstract||
 |keyword1|N|||

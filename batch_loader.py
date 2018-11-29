@@ -15,7 +15,8 @@ required_field_names = (
     'resource_type1',
     'title1',
     'creator1',
-    'license1'
+    'license1',
+    'rights_statement'
 )
 
 
