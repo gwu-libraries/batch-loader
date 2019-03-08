@@ -27,8 +27,11 @@ To run batch-loader:
 
 
 ## Specification of CSV
-- The first row must contain the field names.  The ordering of the columns does not matter.
+Note: Currently, the batch loader can only load files with .pdf extension
+
+- The first row must contain the field names.  The ordering of the columns does not matter. The batch loader will choke if there are spaces after the field names. Any field names that are not recognized by GWSS will be ignored (note: no error message will be output, and remaining data will be loaded).
 - Multiple numbered columns can be used to represent multiple-valued fields.  For example, if there are multiple authors, then add columns called `creator2`, `creator3`, etc.
+- The bulk loader doesn't handle diacritics and certain special characters well. It will fail to load any spreadsheet with these characters. These characters can be added back in the GWSS manual editor (via the web admin UI). 
 - Field values are as per the table below:  (Note: more to be added soon)
 
 |Field Name|Required?|Label in GWSS UI (if different)|Notes|
