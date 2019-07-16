@@ -65,3 +65,4 @@ To update items already in GW ScholarSpace, populate the `object_id` column with
 When updating:
 
 - If a column is left blank, batch loading will _*delete*_ the metadata for that field on the existing item in GWSS.  For instance, if the item in GWSS currently has a "GW Unit" value, then updating it via the batch loader and leaving the `gw_affiliation1` column blank wil _*remove*_ the GW Unit value in GWSS.  If there is no `gw_affiliation1` column in the CSV, then the GW Unit metadata in GWSS will not be modified, if present. 
+- If `first_file` is left blank, batch loading will _*only*_ update metadata and will not update files.  Any existing file attachments will be left in place.
