@@ -27,7 +27,6 @@ To run batch-loader:
 
 
 ## Specification of CSV
-Note: Currently, the batch loader can only load files with .pdf extension
 
 - The first row must contain the field names.  The ordering of the columns does not matter. The batch loader will choke if there are spaces after the field names. Any field names that are not recognized by GWSS will be ignored (note: no error message will be output, and remaining data will be loaded).
 - Multiple numbered columns can be used to represent multiple-valued fields.  For example, if there are multiple authors, then add columns called `creator2`, `creator3`, etc.
@@ -54,8 +53,8 @@ Note: Currently, the batch loader can only load files with .pdf extension
 |bibliographic_citation1|N|Previous Publication Information||
 |depositor|Y||Email address for the depositor/owner in GWSS|
 |files|Y||Path to the attachment file, or in the case of multiple attachments, to the folder containing the attachment files|
-|first_file|N||Path to the file which should be positioned as the first attachment (used for the thumbnail, etc.|
-|object_id|N||If specified, the GW ScholarSpace ID of the existing object to be updated|
+|first_file|Y||(Field name is required, value is not) Path to the file which should be positioned as the first attachment (used for the thumbnail, etc.|
+|object_id|Y||(Field name is required, value is not) If specified, the GW ScholarSpace ID of the existing object to be updated|
 
 
 ## Updating existing items
