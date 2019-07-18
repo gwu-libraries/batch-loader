@@ -12,11 +12,13 @@ log = logging.getLogger(__name__)
 
 required_field_names = (
     'files',
+    'first_file',
     'resource_type1',
     'title1',
     'creator1',
     'license1',
-    'rights_statement'
+    'rights_statement',
+    'object_id'
 )
 
 
