@@ -8,17 +8,16 @@ import os
 import shutil
 import subprocess
 
+
 log = logging.getLogger(__name__)
 
+from configparser import ConfigParser
+
+parser=ConfigParser()
+parser.read('Required_values.ini')
+
 required_field_names = (
-    'files',
-    'first_file',
-    'resource_type1',
-    'title1',
-    'creator1',
-    'license1',
-    'rights_statement',
-    'object_id'
+    parser.options('Fields')
 )
 
 
