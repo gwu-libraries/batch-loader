@@ -6,28 +6,30 @@
 
 # Example for fake_rake:
 
-from configparser import ConfigParser
-
-config1=ConfigParser()
-
-ingest_path = "example/ExcelRead.xlsx"
+ingest_path = "example/"
 # Command location is relative to ingest path
-ingest_command = "python3 ../fake_rake.py"
+ingest_command = "python ../fake_rake.py"
 
 debug_mode = True
 
+from configparser import ConfigParser
 
-# add required fields as a key:value pair
+config=ConfigParser()
+#to add more required fields add the name in 'Fields' section , to remove simply delete the value from 'Fields'
 
-config1['Fields']={
+#Required_values.ini is dynamically created with write mode and the values are read in the batch_loader program in line #17
+#from the Required_values.ini
+#To verify which values are being passed to the program check the Required_values.ini file
+
+config['Fields']={
     'files':'1',
-    'resource_type1' : '2',
-    'title1' :'3',
-    'creator1':'4',
+    'first_file':'2',
+    'resource_type1' : '3',
+    'title1' :'4',
     'license1':'5',
     'rights_statement':'6',
     'object_id':'7'
 }
 
-with open('./Required_Values.ini','w') as f:
-    config1.write(f)
+with open('./Required_values.ini','w') as f:
+    config.write(f)
