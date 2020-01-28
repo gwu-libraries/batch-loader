@@ -7,18 +7,16 @@ import json
 import os
 import shutil
 import subprocess
+import xlrd
+from collections import OrderedDict
 
 log = logging.getLogger(__name__)
 
+import example_config as cfg1
+
+
 required_field_names = (
-    'files',
-    'first_file',
-    'resource_type1',
-    'title1',
-    'creator1',
-    'license1',
-    'rights_statement',
-    'object_id'
+  cfg1.required
 )
 
 
@@ -27,10 +25,36 @@ def load_csv(filepath):
     Reads CSV and returns field names, rows
     """
     log.debug('Loading csv')
+
     with open(filepath) as csvfile:
         reader = csv.DictReader(csvfile)
         return reader.fieldnames, list(reader)
 
+def load_excel(filepath):
+    """
+    Reads Excel and returns field names, rows
+    """
+    log.debug('Loading excel')
+    wb = xlrd.open_workbook("./example/ExcelRead.xlsx")
+    #The excel file name has to be provided in order to load the file
+    sheet = wb.sheet_by_index(0)
+    sheet.cell_value(0, 0)
+
+    list_1 = []
+    #list_1 is the list of field names passed in the first row
+    od = OrderedDict()
+    list_2 = []
+    #list_2 is an OrderedDict
+    for i in range(sheet.ncols):
+        list_1.insert(i, sheet.cell_value(0, i))
+
+    for j in range(1, sheet.nrows):
+        for i in range(sheet.ncols):
+            od[sheet.cell_value(0, i)] = sheet.cell_value(j, i)
+
+        list_2.append(od)
+
+    return list_1,list_2
 
 def validate_field_names(field_names):
     log.debug('Validating field names')
@@ -144,19 +168,32 @@ if __name__ == '__main__':
     parser.add_argument('--debug', action='store_true')
     parser.add_argument('csv', help='filepath of CSV file')
 
+    parser.add_argument('--xlsx', action='store_true')
+
     args = parser.parse_args()
+
+    if args.xlsx:
+
+        #enter to load_excel method if --xlsx is passed at the end of the command
+        field_names, rows = load_excel(args.xlsx)
+
+    else:
+
+        field_names, rows = load_csv(args.csv)
+        #else load_csv method is loaded
 
     logging.basicConfig(
         level=logging.DEBUG if args.debug else logging.INFO
     )
     logging.basicConfig(level=logging.DEBUG)
 
-    field_names, rows = load_csv(args.csv)
-    log.info('Loading {} object from {}'.format(len(rows), args.csv))
+
+    #log.info('Loading {} object from {}'.format(len(rows), args.csv))
     validate_field_names(field_names)
     singular_field_names, repeating_field_names = analyze_field_names(field_names)
 
     base_filepath = os.path.dirname(os.path.abspath(args.csv))
+
 
     for row in rows:
         metadata = create_repository_metadata(row, singular_field_names, repeating_field_names)
