@@ -25,7 +25,6 @@ def load_csv(filepath):
     Reads CSV and returns field names, rows
     """
     log.debug('Loading csv')
-
     with open(filepath) as csvfile:
         reader = csv.DictReader(csvfile)
         return reader.fieldnames, list(reader)
@@ -35,8 +34,7 @@ def load_excel(filepath):
     Reads Excel and returns field names, rows
     """
     log.debug('Loading excel')
-    wb = xlrd.open_workbook("./example/ExcelRead.xlsx")
-    #The excel file name has to be provided in order to load the file
+    wb = xlrd.open_workbook(filepath)
     sheet = wb.sheet_by_index(0)
     sheet.cell_value(0, 0)
 
@@ -166,21 +164,23 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser(description='Loads into GW Scholarspace from CSV')
     parser.add_argument('--debug', action='store_true')
-    parser.add_argument('csv', help='filepath of CSV file')
+    parser.add_argument('filepath', help='filepath of CSV/Excel file')
 
     parser.add_argument('--xlsx', action='store_true')
 
     args = parser.parse_args()
 
+
     if args.xlsx:
 
-        #enter to load_excel method if --xlsx is passed at the end of the command
-        field_names, rows = load_excel(args.xlsx)
+        #enter to load_excel method if --xlsx is passed
+        field_names, rows = load_excel(args.filepath)
 
     else:
 
-        field_names, rows = load_csv(args.csv)
-        #else load_csv method is loaded
+        field_names, rows = load_csv(args.filepath)
+
+        #else load_csv method is passed
 
     logging.basicConfig(
         level=logging.DEBUG if args.debug else logging.INFO
@@ -192,7 +192,7 @@ if __name__ == '__main__':
     validate_field_names(field_names)
     singular_field_names, repeating_field_names = analyze_field_names(field_names)
 
-    base_filepath = os.path.dirname(os.path.abspath(args.csv))
+    base_filepath = os.path.dirname(os.path.abspath(args.filepath))
 
 
     for row in rows:
