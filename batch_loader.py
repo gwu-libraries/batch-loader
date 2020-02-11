@@ -12,7 +12,7 @@ from collections import OrderedDict
 
 log = logging.getLogger(__name__)
 
-import example_config as cfg1
+import config as cfg1
 
 
 required_field_names = (
