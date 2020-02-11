@@ -8,4 +8,3 @@ required = {'files',
     'object_id'}
 
 use_anonymous = True
-
