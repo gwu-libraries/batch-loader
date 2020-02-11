@@ -12,3 +12,12 @@ ingest_path = "./example/"
 ingest_command = "python3 ../fake_rake.py"
 
 debug_mode = True
+
+required = {'files',
+    'first_file',
+    'resource_type1',
+    'title1',
+    'creator1',
+    'license1',
+    'rights_statement',
+    'object_id'}
