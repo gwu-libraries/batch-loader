@@ -1,4 +1,4 @@
-# GW ScholarSpace ingest configuration
+"""# GW ScholarSpace ingest configuration
 ingest_path = "/opt/scholarspace/scholarspace-hyrax"
 ingest_command = "rvmsudo RAILS_ENV=production rake gwss:ingest_etd"
 
@@ -6,9 +6,18 @@ debug_mode = False
 
 # Example for fake_rake:
 """
-ingest_path = "example/"
-# Command location is relative to ingest path
-ingest_command = "python ../fake_rake.py"
-
+ingest_path = "./example/"
+# # Command location is relative to ingest path
+ingest_command = "python3 ../fake_rake.py"
+#
 debug_mode = True
-"""
+
+# Add/Delete the required values below
+required = ('files',
+    'first_file',
+    'resource_type1',
+    'title1',
+    'creator1',
+    'license1',
+    'rights_statement',
+    'object_id')
