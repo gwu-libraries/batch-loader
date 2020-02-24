@@ -7,18 +7,16 @@ import json
 import os
 import shutil
 import subprocess
+import config
+
 import xlrd
 from collections import OrderedDict
 
 log = logging.getLogger(__name__)
 
-import config as cfg1
 
 
-required_field_names = (
-  cfg1.required
-)
-
+required_field_names = config.required
 
 def load_csv(filepath):
     """
