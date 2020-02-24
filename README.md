@@ -20,11 +20,22 @@ Requires Python >= 3.5
 4. Edit configuration file. The file is annotated with descriptions of the configuration options.
 
 ## Running
-To run batch-loader:
+1.To run batch-loader with csv file as input:
 
     source ENV/bin/activate
     python batch_loader.py <path to csv>
 
+2.To run the batch loader with excel file as input 
+
+    source ENV/bin/activate
+    python batch_loader.py <path to excel> --xlsx
+
+## Adding/Deleting/modifying a required field name 
+
+- The required field names are configurable and can be modified based on user input. To add/delete/modify the required                                  values to be loaded to the program follow the steps provided below -
+
+  1. Navigate to config.py file 
+  2. Under 'required=()' add/delete/modify the field name which is to be loaded
 
 ## Specification of CSV
 
